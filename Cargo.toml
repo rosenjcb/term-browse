@@ -1,0 +1,11 @@
+[package]
+name = "term-browse"
+version = "0.1.0"
+authors = ["Jacob Rosenzweig <rosenjcb@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+html5ever = "*"
+crossterm = "0.9.6"
+log = "0.4.6"
+stderrlog = "0.4.1"
