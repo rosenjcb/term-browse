@@ -2,6 +2,9 @@
 # Created by https://www.gitignore.io/api/rust,intellij
 # Edit at https://www.gitignore.io/?templates=rust,intellij
 
+# Log file lol
+test.txt
+
 ### Intellij ###
 #Just ignore the entire folder.
 .idea/
