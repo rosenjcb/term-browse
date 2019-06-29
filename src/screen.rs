@@ -4,23 +4,26 @@ use std::fs::File;
 use std::io::{LineWriter, Write};
 use std::fs;
 use std::path::Path;
+use crate::selection::Selection;
 
 pub struct Screen {
     pub buffer: Vec<GridRow>,
     pub view_loc: u16,
+    selection: Selection,
     terminal: Terminal,
 }
 
 impl Screen{
     pub fn new(x: i32, y: i32) -> Self {
         //let mut buffer: Vec<GridRow> = Vec::with_capacity(usize::from(y));
-        let mut buffer = (0 .. y).map(|_| GridRow::new(x)).collect::<Vec<_>>();
+        let buffer = (0 .. y).map(|_| GridRow::new(x)).collect::<Vec<_>>();
         /*for i in 0..y {
             buffer.push(GridRow::new(x as i32));
         }*/
         let view_loc = 0;
         let terminal = terminal();
-        Screen{ buffer, view_loc, terminal }
+        let selection = Selection::new();
+        Screen{ buffer, view_loc, selection, terminal }
     }
 
     pub fn save(&self){
@@ -32,9 +35,15 @@ impl Screen{
 
     }
 
-    pub fn write(&mut self, x: u16, y: u16, c: char) {
+    pub fn write(&mut self, c: char) {
+        let cursor = cursor();
         self.terminal.write(c);
-        self.buffer[y as usize].write(x as i32, c);
+        let pos = cursor.pos();
+        self.buffer[cursor.pos().1 as usize].write(cursor.pos().1  as i32, c);
+    }
+
+    pub fn highlight() {
+
     }
 
     pub fn load(&mut self, filepath: &Path) {

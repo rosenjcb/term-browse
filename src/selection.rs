@@ -2,34 +2,33 @@ use crossterm::{Terminal, terminal, TerminalCursor, cursor, Color};
 use crate::screen::Screen;
 use crate::coord::Coord;
 
-pub struct Selection<'a, 'b>{
-    context: &'a Screen,
-    content: (&'b Coord, &'b Coord),
+pub struct Selection {
     cursor: TerminalCursor,
+    content: String,
+    clipboard: String,
 }
 
-impl<'a, 'b> Selection<'a, 'b> {
-    pub fn new(&self, context: &mut Screen) -> Self {
-        let coord = Coord::new(0,0);
-        let content = (&coord, &coord);
+impl Selection {
+    pub fn new() -> Self {
         let cursor = cursor();
-        Selection { context, content , cursor}
+        let (content, clipboard) = (String::from(""), String::from(""));
+        Selection { cursor, content, clipboard }
     }
     pub fn start(&mut self, coord: (u16, u16)) {
-        let start = Coord::new(coord.0, coord.1);
-        self.content.0 = &start;
-        self.content.1 = &start;
+        /*self.content.0.x = coord.0;
+        self.content.0.y = coord.1;
+        self.content.1.x = coord.0;
+        self.content.1.y = coord.1;*/
         //self.context = context;
     }
     pub fn update(&mut self, end: (u16,u16)) {
-        let end = Coord::new(end.0, end.1);
         //let paint = paint(self.context.buffer[end.1][end.0].c.with(Color::Black).on(Color::Yellow));
-        self.content.1 = &end;
-       // self.context
+        /*self.content.1.x = end.0;
+        self.content.1.y = end.1;*/
     }
 
-    pub fn copy() {
-
+    pub fn copy(&mut self) {
+        self.clipboard = String::from(self.content.as_str());
     }
 
     pub fn paste() {

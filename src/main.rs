@@ -1,11 +1,11 @@
-use crossterm::{cursor, Color, Colored, terminal, ClearType, TerminalInput, InputEvent, color, KeyEvent, MouseButton, MouseEvent, RawScreen, input};
+use term_browse::screen::Screen;
+use crossterm::*;
 use std::{thread, time::Duration, env};
-use crate::screen::Screen;
-use crate::selection::Selection;
 use std::fs::File;
 use std::io::{LineWriter, Write};
 use log::{debug, info, warn};
 use std::path::Path;
+
 
 fn main() {
     if let Ok(_raw) = RawScreen::into_raw_mode() {
@@ -23,12 +23,12 @@ fn main() {
 
         cursor.show().expect("Cannot display cursor");
         let mut screen = Screen::new(80, 24);
-        let mut selection = Selection::new()
+        //let mut selection = Selection::new(&screen);
         loop {
             let event = sync_stdin.next();
 
             if let Some(key_event) = event {
-                if process_input_event(key_event, &mut screen, &mut selection) {
+                if process_input_event(key_event, &mut screen) {
                     break;
                 }
             }
@@ -37,7 +37,7 @@ fn main() {
     }
 }
 
-fn process_input_event(key_event: InputEvent, screen: &mut Screen,  selection: &mut &Selection) -> bool {
+fn process_input_event(key_event: InputEvent, screen: &mut Screen) -> bool {
     match key_event {
         InputEvent::Keyboard(k) => {
             match k {
@@ -54,6 +54,7 @@ fn process_input_event(key_event: InputEvent, screen: &mut Screen,  selection: &
                     }
                     _ => {
                         let cursor = cursor();
+                        screen.write(c);
                         //screen.write(cursor.pos().0, cursor.pos().1, c);
                     }
                 },
@@ -75,10 +76,13 @@ fn process_input_event(key_event: InputEvent, screen: &mut Screen,  selection: &
                     cursor.move_down(1);
                 },
                 KeyEvent::ShiftRight => {
-                    let cursor = cursor();
+                    /*let cursor = cursor();
                     let pos = cursor.pos();
-                    let c = screen.buffer[pos.1][pos.0].c;
-                    println!("{}", paint(c).with(Color::Black).on(Color::Yellow));
+                    let c = screen.buffer[pos.1 as usize].inner[pos.0 as usize].c;
+                    let s = c.to_string();let highlight = style(s.as_str()).with(Color::Black).on(Color::Yellow);
+
+                    //let highlight = s.as_str().black().on_yellow();
+                    println!("{}", highlight);*/
 
                 },
                 KeyEvent::Backspace => {

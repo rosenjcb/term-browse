@@ -2,7 +2,7 @@ use crate::gridcell::{GridCell, Color};
 use crossterm::{Terminal, terminal, TerminalCursor, cursor};
 
 pub struct GridRow {
-    inner: Vec<GridCell>,
+    pub inner: Vec<GridCell>,
     terminal: Terminal,
     cursor: TerminalCursor,
 }
@@ -10,8 +10,8 @@ pub struct GridRow {
 impl GridRow {
     pub fn new(columns: i32) -> Self {
         let mut inner: Vec<GridCell> = Vec::with_capacity(columns as usize);
-        let mut terminal = terminal();
-        let mut cursor = cursor();
+        let terminal = terminal();
+        let cursor = cursor();
         //(0 .. columns).map(|_| GridRow::new(x)).collect::<Vec<_>>()
         for i in 0..columns {
             let cell: GridCell = GridCell{c: ' ', fg: Color::WHITE, bg: Color::BLACK};
